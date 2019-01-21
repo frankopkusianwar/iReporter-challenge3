@@ -4,7 +4,11 @@ from api.utilities import make_id, check_user, check_email, check_paswd
 import uuid
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+import jwt
+from api import app
 
+
+app.config['SECRET_KEY'] = 'franko@pkusianwar'
 new_user = IreporterDb()
 
 class UserController:
@@ -53,3 +57,22 @@ class UserController:
             "message": "user created successfully", 
             }]
         }), 201
+
+    def login(self):
+        auth = request.authorization
+        if not auth.username or not auth.password:
+            return jsonify({"message":"please enter username and password"}),401
+        if new_user.get_login_user(auth.username) == None:
+            return jsonify({"message":"The username does not exist! please register, or enter correct username"}),401
+        user_check = [new_user.get_login_user(auth.username)]
+        if check_password_hash(user_check[0]['password'], auth.password):
+            access_token = jwt.encode({"userId":user_check[0]['Id'], "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+            return jsonify({'access-token': access_token.decode('UTF-8')})
+        return jsonify({"message":"invalid password"}),401
+
+    
+    def get_spec_user(self, particular_id):
+        return jsonify({
+            "status": 200,
+            "data": new_user.get_specific_user(particular_id)
+        })
