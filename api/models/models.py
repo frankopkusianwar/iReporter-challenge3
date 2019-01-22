@@ -106,4 +106,9 @@ class IreporterDb:
                  return "status updated"  
         return None
 
+    def get_login_user(self, name):
+        for user in self.user_list:
+             if user.user_name == name:
+                return user.make_json() 
+        return None
         

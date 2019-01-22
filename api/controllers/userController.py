@@ -53,3 +53,14 @@ class UserController:
             "message": "user created successfully", 
             }]
         }), 201
+
+    def login(self):
+        auth = request.authorization
+        if not auth.username or not auth.password:
+            return jsonify({"message":"please enter username and password"}),401
+        if new_user.get_login_user(auth.username) == None:
+            return jsonify({"message":"The username does not exist! please register"}),401
+        user_check = [new_user.get_login_user(auth.username)]
+        if check_password_hash(user_check[0]['password'], auth.password):
+            return jsonify({'message': "user successfully logged in!"})
+        return jsonify({"message":"invalid password"}),401

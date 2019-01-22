@@ -35,3 +35,7 @@ def add_comment_to_specific_red_flag_record(comment_incident_id):
 @bp.route("/red-flags/<int:status_incident_id>/status", methods=["PATCH"])
 def change_red_flag_status(status_incident_id):
     return incident.change_particular_status(status_incident_id)
+
+@bp.route("/login", methods=["GET"])
+def login_user():
+    return user.login()
