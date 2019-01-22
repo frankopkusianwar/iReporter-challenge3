@@ -110,5 +110,12 @@ class IreporterDb:
         for user in self.user_list:
              if user.user_name == name:
                 return user.make_json() 
-        return None
+        return None  
+
+    def get_specific_user(self, return_id):
+        for user in self.user_list:
+             if user.user_id == return_id:
+                return user.make_json() 
+        return None      
+    
         

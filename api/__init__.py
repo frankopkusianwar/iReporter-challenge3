@@ -1,6 +1,7 @@
 from flask import Flask
-from api.views import views
+
 
 
 app = Flask(__name__, instance_relative_config=True)
+from api.views import views
 app.register_blueprint(views.bp)
