@@ -70,9 +70,9 @@ class UserController:
             return jsonify({'access-token': access_token.decode('UTF-8')})
         return jsonify({"message":"invalid password"}),401
 
-    
     def get_spec_user(self, particular_id):
         return jsonify({
             "status": 200,
             "data": new_user.get_specific_user(particular_id)
         })
+          
