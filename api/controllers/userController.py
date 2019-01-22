@@ -64,6 +64,7 @@ class UserController:
         user_check = [new_user.get_login_user(auth.username)]
         if check_password_hash(user_check[0]['password'], auth.password):
             access_token = jwt.encode({"userId":user_check[0]['Id'], "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, "@frankopkusianwar")
+
             return jsonify({'access-token': access_token.decode('UTF-8')})
         return jsonify({"message":"invalid password"}),401
 
