@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from api.controllers.userController import UserController
 from api.controllers.incidentController import IncidentController
 from functools import wraps
-from api import app
 import jwt
 
 bp = Blueprint("ireporterViews", __name__, url_prefix="/api/v1")
@@ -18,7 +17,7 @@ def token_required(f):
         if not token:
             return jsonify({"message":"token missing"}),401
         try:
-            data = jwt.decode(token,app.config['SECRET_KEY'])
+            data = jwt.decode(token, 'franko@pkusianwar')
             current_user = user.get_spec_user(data['userId'])
         except:
             return jsonify({"message":"invalid token"})
