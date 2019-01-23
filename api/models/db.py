@@ -1,18 +1,18 @@
 import psycopg2
 import psycopg2.extras
-import os
+from os import environ
 
 
 class DatabaseConnection:
     """docstring for DataBaseConnection"""
 
     def __init__(self):
-        #self.db = 'ireporter_db'
-        self.db = 'Ireporter_test_db'
+        self.db = 'ireporter_db'
+        #self.db = 'Ireporter_test_db'
+        url ='postgres://postgres:security93@localhost/Ireporter_test_db'
 
         try:
-            connection = psycopg2.connect(
-                dbname=self.db, user='postgres', password='security93', host='localhost', port='5432')
+            connection = psycopg2.connect(url)
             connection.autocommit = True
             self.cursor = connection.cursor(
                 cursor_factory=psycopg2.extras.RealDictCursor)
