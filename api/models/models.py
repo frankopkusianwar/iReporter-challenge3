@@ -1,5 +1,6 @@
 class User:
     """model class for user"""
+
     def __init__(self, other_names, username, password, registered, user_id, first_name, last_name, email, is_admin, public_user_id):
         self.user_id = user_id
         self.first_name = first_name
@@ -13,7 +14,7 @@ class User:
         self.public_user_id = public_user_id
 
     def make_json(self):
-        info ={
+        info = {
             "Id": self.user_id,
             "firstName": self.first_name,
             "lastName": self.last_name,
@@ -27,8 +28,9 @@ class User:
         }
         return info
 
+
 class Incident:
-    def __init__(self,incident_id, incident_type, location, status, images, videos, created_on, created_by, comment, public_incident_id):
+    def __init__(self, incident_id, incident_type, location, status, images, videos, created_on, created_by, comment, public_incident_id):
         self.incident_id = incident_id
         self.incident_type = incident_type
         self.location = location
@@ -41,7 +43,7 @@ class Incident:
         self.public_incident_id = public_incident_id
 
     def incident_json(self):
-        incident_info ={
+        incident_info = {
             "id": self.incident_id,
             "createdOn": self.created_on,
             "createdBy": self.created_by,
@@ -55,9 +57,10 @@ class Incident:
         }
         return incident_info
 
+
 class IreporterDb:
     def __init__(self):
-        
+
         self.user_list = []
         self.incident_list = []
 
@@ -69,53 +72,51 @@ class IreporterDb:
 
     def get_incidents(self):
         if len(self.incident_list) == 0:
-            return None 
+            return None
         return [incidents.incident_json() for incidents in self.incident_list]
-    
+
     def get_specific_incident(self, return_id):
         for incident in self.incident_list:
-             if incident.incident_id == return_id:
-                return incident.incident_json() 
+            if incident.incident_id == return_id:
+                return incident.incident_json()
         return None
-    
+
     def delete_incident(self, delete_id):
         for del_incident in self.incident_list:
-             if del_incident.incident_id == delete_id and del_incident.status == "draft":
-                 self.incident_list.remove(del_incident)
-                 return "deleted"    
+            if del_incident.incident_id == delete_id and del_incident.status == "draft":
+                self.incident_list.remove(del_incident)
+                return "deleted"
         return None
 
     def add_comment(self, comment_id, new_comment):
         for comment_to_update in self.incident_list:
-             if comment_to_update.incident_id == comment_id:
-                 comment_to_update.comment = new_comment
-                 return "comment added"  
+            if comment_to_update.incident_id == comment_id:
+                comment_to_update.comment = new_comment
+                return "comment added"
         return None
-    
+
     def edit_red_flag(self, location_id, new_location):
         for location_to_update in self.incident_list:
-             if location_to_update.incident_id == location_id and location_to_update.status == "draft":
-                 location_to_update.location = new_location
-                 return "location updated"  
+            if location_to_update.incident_id == location_id and location_to_update.status == "draft":
+                location_to_update.location = new_location
+                return "location updated"
         return None
 
     def update_status(self, status_id, new_status):
         for status_to_update in self.incident_list:
-             if status_to_update.incident_id == status_id:
-                 status_to_update.status = new_status
-                 return "status updated"  
+            if status_to_update.incident_id == status_id:
+                status_to_update.status = new_status
+                return "status updated"
         return None
 
     def get_login_user(self, name):
         for user in self.user_list:
-             if user.user_name == name:
-                return user.make_json() 
-        return None  
+            if user.user_name == name:
+                return user.make_json()
+        return None
 
     def get_specific_user(self, return_id):
         for user in self.user_list:
-             if user.user_id == return_id:
-                return user.make_json() 
-        return None      
-    
-        
+            if user.user_id == return_id:
+                return user.make_json()
+        return None
