@@ -8,13 +8,13 @@ db = DatabaseConnection()
 
 
 class IncidentController:
-    def create_incident(self):
+    def create_incident(self, user_id):
         incident_data = request.get_json()
         incident_type = incident_data.get('incidentType')
         location = incident_data.get('location')
         status = "draft"
         created_on = datetime.datetime.today()
-        created_by = request.headers["userId"]
+        created_by = user_id
         images = incident_data.get('images')
         videos = incident_data.get('videos')
         comment = ""
@@ -71,8 +71,6 @@ class IncidentController:
         comment_data = request.get_json()
         new_comment = comment_data.get("comment")
         db.edit_comment(comment_id, new_comment)
-        if db.edit_comment(comment_id, new_comment) == None:
-            return jsonify({"status": 200, "message": "the red-flag you're trying to comment on  does not exist"})
         return jsonify({
             "data": [{
                 "status": 200,
