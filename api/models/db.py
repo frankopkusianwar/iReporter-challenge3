@@ -21,13 +21,13 @@ class DatabaseConnection:
             self.host="ec2-50-17-193-83.compute-1.amazonaws.com"
 
         try:
-            connection = psycopg2.connect(database=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
-            connection.autocommit = True
-            self.cursor = connection.cursor()
+            self.connection = psycopg2.connect(database=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
+             self.connection.autocommit = True
+             self.cursor = self.connection.cursor()
 
-            # connection = psycopg2.connect(database='Ireporter_test_db', user='postgres', host='localhost', password='security93', port='5432')
-            # connection.autocommit = True
-            # self.cursor = connection.cursor()
+            # self.connection = psycopg2.connect(database='Ireporter_test_db', user='postgres', host='localhost', password='security93', port='5432')
+            # self.connection.autocommit = True
+            # self.cursor = self.connection.cursor()
             # self.create_tables()
 
         except:
