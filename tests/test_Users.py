@@ -7,7 +7,7 @@ from tests.base import BaseTest
 class TestUsers(BaseTest):
     
     def test_create_user(self):
-        user = {"firstName":"ofgh", "lastName":"franko", "otherNames":"oki", "username":"francis", "email":"jrfgmugabe@gmail.com",
+        user = {"firstName":"ofgh", "lastName":"franko", "otherNames":"oki", "username":"franciscoiv", "email":"jrffgmugabe@gmail.com",
         "password":"23435354646", "isAdmin":False, "registered":"2019-01-20"}
         response = self.test_client.post(
             'api/v1/users',
@@ -21,7 +21,7 @@ class TestUsers(BaseTest):
                          201)
 
     def test_user_empty_fields(self):
-        user = {"firstName":"ofgh", "":"franko", "":"oki", "username":"francis", "email":"jrfgmugabe@gmail.com",
+        user = {"firstName":"ofgh", "lastName":"", "":"oki", "username":"francisha", "email":"jrfgmcougabe@gmail.com",
         "password":"", "isAdmin":False, "registered":"2019-01-20"}
         response = self.test_client.post(
             'api/v1/users',
@@ -30,7 +30,7 @@ class TestUsers(BaseTest):
         )
         message = json.loads(response.data.decode())
         self.assertEqual(message['message'],
-                         'please fill all fields')
+                         'fields should be strings')
 
     def test_for_valid_email(self):
         user = {"firstName":"ofgh", "lastName":"franko", "otherNames":"oki", "username":"francis", "email":"jrfgmugabcom",
@@ -54,4 +54,18 @@ class TestUsers(BaseTest):
         )
         message = json.loads(response.data.decode())
         self.assertEqual(message['message'],
-                         'password should be more than 8 characters')       
+                         'password should be more than 8 characters')
+
+    def test_create_user(self):
+        user = {"firstName":"ofgh", "lastName":3, "otherNames":"oki", "username":45, "email":"jrffgmugabe@gmail.com",
+        "password":"23435354646", "isAdmin":False, "registered":"2019-01-20"}
+        response = self.test_client.post(
+            'api/v1/users',
+            content_type='application/json',
+            data=json.dumps(user)
+        )
+        message = json.loads(response.data)
+        self.assertEqual(message['message'],
+                         'fields should be strings')
+        self.assertEqual(response.status_code,
+                         200)

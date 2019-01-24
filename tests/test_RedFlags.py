@@ -8,19 +8,19 @@ class TestEndpoints(BaseTest):
     def test_create_incident(self):
         incident = {"incidentType":"red-flag", "location":"120.00", "status":"draft", "images":'image-url', "videos":"video-url","createdBy": 2, "comment":"", "created_on":"25-nov-2018"}
         response = self.test_client.post(
-            'api/v1/red-flags',
+            'api/v1/incidents',
             content_type='application/json',
             data=json.dumps(incident),
             headers = {"x-access-token":self.user_token()}
         )
         message = json.loads(response.data.decode())
         self.assertEqual(message['data'][0]['message'],
-                         'created red-flag record')
+                         'created incident record')
 
     def test_check_invalid_incident_type(self):
         incident = {"incidentType":"relag", "location":"120.00", "status":"draft", "images":'image-url', "videos":"video-url","createdBy": 2, "comment":"", "created_on":"25-nov-2018"}
         response = self.test_client.post(
-            'api/v1/red-flags',
+            'api/v1/incidents',
             content_type='application/json',
             data=json.dumps(incident),
             headers = {"x-access-token":self.user_token()})
@@ -31,7 +31,7 @@ class TestEndpoints(BaseTest):
     def test_check_empty_incident_fields(self):
         incident = {"incidentType":"", "location":"", "status":"", "images":"", "videos":"video-url","createdBy": 2, "comment":"", "created_on":"25-nov-2018"}
         response = self.test_client.post(
-            'api/v1/red-flags',
+            'api/v1/incidents',
             content_type='application/json',
             data=json.dumps(incident),
             headers = {"x-access-token":self.user_token()}
@@ -68,11 +68,11 @@ class TestEndpoints(BaseTest):
                          "updated red-flag record's location")
 
     def test_update_status(self):
-        resp = self.test_client.patch('api/v1/red-flags/{}/status'.format(1), content_type='application/json', headers = {"x-access-token":self.user_token()}, data=json.dumps({"location":"resolved"}))
+        resp = self.test_client.patch('api/v1/red-flags/{}/status'.format(1), content_type='application/json', headers = {"x-access-token":self.user_token()}, data=json.dumps({"status":"resolved"}))
         assert(resp.status_code) == 200
         message = json.loads(resp.data.decode())
         self.assertEqual(message['message'],
-                         'status updated successfully')
+                         'only admin can change status')
 
     def test_delete_red_flag(self):
         response = self.test_client.delete('api/v1/red-flags/{}'.format(2),headers = {"x-access-token":self.user_token()})
@@ -86,3 +86,14 @@ class TestEndpoints(BaseTest):
         message = json.loads(response.data.decode())
         self.assertEqual(message['message'],
                          'requested red-flag-id not found')
+    def test_strings(self):
+        incident = {"incidentType":"red-flag", "location":3, "status":"draft", "images":3, "videos":"video-url","createdBy": 2, "comment":"", "created_on":"25-nov-2018"}
+        response = self.test_client.post(
+            'api/v1/incidents',
+            content_type='application/json',
+            data=json.dumps(incident),
+            headers = {"x-access-token":self.user_token()}
+        )
+        message = json.loads(response.data.decode())
+        self.assertEqual(message['message'],
+                         'field should be a string')                     

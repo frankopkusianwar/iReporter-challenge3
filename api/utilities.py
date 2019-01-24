@@ -1,7 +1,7 @@
 import re
 
 
-def check_inc(fields, loc, img, vid):
+def check_inc(fields):
     for field in fields:
         if not field:
             return "invalid"
@@ -10,7 +10,7 @@ def check_inc(fields, loc, img, vid):
 
 def check_user(fields):
     for field in fields:
-        if not field or type(field) != str or field.isspace():
+        if not field or field.isspace():
             return "invalid"
     return "valid"
 
