@@ -11,7 +11,7 @@ class BaseTest(unittest.TestCase):
         self.app = create_app("Testing")
         self.test_client = self.app.test_client(self)
         self.db = DatabaseConnection()
-
+        
 
     def tearDown(self):
         self.test_client = self.app.test_client(self)
@@ -26,8 +26,4 @@ class BaseTest(unittest.TestCase):
         login_response = self.test_client.post('api/v1/login', content_type = "application/json", data = json.dumps(login_details))
         data = json.loads(login_response.data.decode())
         return data['access-token']
-
-        return header
-
-if __name__ == "__main__":
-    unittest.main()
+        

@@ -86,29 +86,3 @@ class TestEndpoints(BaseTest):
         message = json.loads(response.data.decode())
         self.assertEqual(message['message'],
                          'requested red-flag-id not found')
-
-'''    def test_add_comment_id_does_not_exist(self):
-        response = self.test_client.patch('api/v1/red-flags/{}/comment'.format(2), content_type='application/json', data=json.dumps({"comment":"this is a comment"}))
-        message = json.loads(response.data.decode())
-        self.assertEqual(message['message'],
-                         "the red-flag you're trying to comment on  does not exist") '''
-
-'''    def test_check_delete_id_does_not_exist(self):
-        response = self.test_client.delete('api/v1/red-flags/{}'.format(2))
-        message = json.loads(response.data.decode())
-        self.assertEqual(message['message'],
-                         'the id to delete does not exist or status is under investigation, rejected, or resolved') '''
-
-'''    def test_update_location_id_does_not_exist(self):
-        resp = self.test_client.patch('api/v1/red-flags/{}/location'.format(2), content_type='application/json', data=json.dumps({"location":{"latitude":"13.00","longitude":"13.00"}}))
-        assert(resp.status_code) == 200
-        message = json.loads(resp.data.decode())
-        self.assertEqual(message['message'],
-                         'the id does not exist or status is under investigation, rejected, or resolved')
-
-    def test_update_status_id_does_not_exist(self):
-        resp = self.test_client.patch('api/v1/red-flags/{}/status'.format(2), content_type='application/json', data=json.dumps({"location":"resolved"}))
-        assert(resp.status_code) == 200
-        message = json.loads(resp.data.decode())
-        self.assertEqual(message['message'],
-                         "the red-flag you're trying to change status does not exist") '''

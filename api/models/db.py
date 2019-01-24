@@ -1,18 +1,27 @@
+import os
 import psycopg2
 import psycopg2.extras
-from os import environ
 
 
 class DatabaseConnection:
     """docstring for DataBaseConnection"""
 
     def __init__(self):
-        self.db = 'ireporter_db'
-        #self.db = 'Ireporter_test_db'
-        url ='postgres://postgres:security93@localhost/Ireporter_test_db'
+        #self.db = 'ireporter_db'
+        self.db = 'Ireporter_test_db'
+        if os.getenv('ENV') == 'Testing':
+            self.db_name='Ireporter_test_db'
+            self.db_user='postgres'
+            self.db_password='security93'
+            self.host="127.0.0.1"
+        else:
+            self.db_name='dfjm31sae6rceq'
+            self.db_user='vxxpxavgovowji'
+            self.db_password='35ddf4dbab673c413cab9cc521a55cc32ab9d660ce171190c780c8e5398d9c1c'
+            self.host="ec2-50-17-193-83.compute-1.amazonaws.com"
 
         try:
-            connection = psycopg2.connect(url)
+            connection = psycopg2.connect(dbname=self.db_name, user=db_user, host=db_host, password=db_password, port='5432')
             connection.autocommit = True
             self.cursor = connection.cursor(
                 cursor_factory=psycopg2.extras.RealDictCursor)
@@ -44,7 +53,6 @@ class DatabaseConnection:
 
     def login(self, username):
         query = "SELECT * FROM users WHERE username='{}'".format(username)
-        pprint(query)
         self.cursor.execute(query)
         user = self.cursor.fetchone()
         return user
@@ -117,13 +125,6 @@ class DatabaseConnection:
     def delete_intervention(self, incident_Id):
         query = "DELETE FROM incidents WHERE id='{}' AND incident_type='intervention'".format(incident_Id)
         self.cursor.execute(query)
-
-    def login(self, username):
-        query_login = "SELECT * FROM users WHERE username='{}'".format(
-            username)
-        self.cursor.execute(query_login)
-        credentials = self.cursor.fetchone()
-        return credentials
 
     def drop_tables(self):
         """function that drops the tables"""
