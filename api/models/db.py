@@ -21,10 +21,9 @@ class DatabaseConnection:
             self.host="ec2-50-17-193-83.compute-1.amazonaws.com"
 
         try:
-            connection = psycopg2.connect(dbname=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
+            connection = psycopg2.connect(database=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
             connection.autocommit = True
-            self.cursor = connection.cursor(
-                cursor_factory=psycopg2.extras.RealDictCursor)
+            self.cursor = connection.cursor()
 
             create_user_table = """CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,
 		                first_name VARCHAR(100), last_name VARCHAR(100), other_names VARCHAR(100),
