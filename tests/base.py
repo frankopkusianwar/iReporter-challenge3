@@ -11,13 +11,13 @@ class BaseTest(unittest.TestCase):
         self.app = create_app("Testing")
         self.test_client = self.app.test_client(self)
         self.db = DatabaseConnection()
-        self.db.create_tables()
+        #self.db.create_tables()
 
 
 
     def tearDown(self):
         self.test_client = self.app.test_client(self)
-        self.db.drop_tables()
+        #self.db.drop_tables()
 
     def user_token(self):
         user_data = {"firstName":"ofgh", "lastName":"franko", "otherNames":"oki", "username":"fran", "email":"jrfgabe@gmail.com",

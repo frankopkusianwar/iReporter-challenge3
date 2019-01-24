@@ -9,7 +9,7 @@ class DatabaseConnection:
         #self.db = 'ireporter_db'
         #self.db = 'Ireporter_test_db'
         if os.getenv('ENV') == 'Testing':
-            self.db_name='Ireporter_test_db'
+            self.db_name='ireporter_test_db'
             self.db_user='postgres'
             self.db_password='security93'
             self.host="127.0.0.1"
@@ -27,7 +27,7 @@ class DatabaseConnection:
             # self.connection = psycopg2.connect(database='Ireporter_test_db', user='postgres', host='localhost', password='security93', port='5432')
             # self.connection.autocommit = True
             # self.cursor = self.connection.cursor()
-            # self.create_tables()
+            self.create_tables()
 
         except:
             print('Cannot connect to the database.')
