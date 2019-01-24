@@ -11,11 +11,13 @@ class BaseTest(unittest.TestCase):
         self.app = create_app("Testing")
         self.test_client = self.app.test_client(self)
         self.db = DatabaseConnection()
-        
+        #self.db.create_tables()
+
+
 
     def tearDown(self):
         self.test_client = self.app.test_client(self)
-        self.db.drop_tables()
+        #self.db.drop_tables()
 
     def user_token(self):
         user_data = {"firstName":"ofgh", "lastName":"franko", "otherNames":"oki", "username":"fran", "email":"jrfgabe@gmail.com",
@@ -26,7 +28,3 @@ class BaseTest(unittest.TestCase):
         login_response = self.test_client.post('api/v1/login', content_type = "application/json", data = json.dumps(login_details))
         data = json.loads(login_response.data.decode())
         return data['access-token']
-        
-    
-if __name__ == "__main__":
-    unittest.main()
