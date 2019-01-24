@@ -7,8 +7,8 @@ class DatabaseConnection:
     """docstring for DataBaseConnection"""
 
     def __init__(self):
-        self.db = 'ireporter_db'
-        #self.db = 'test_ireporter_db'
+        #self.db = 'ireporter_db'
+        self.db = 'Ireporter_test_db'
 
         try:
             connection = psycopg2.connect(
@@ -30,17 +30,10 @@ class DatabaseConnection:
         except:
             print('Cannot connect to the database.')
 
-    def insert_user(self, first_name, last_name, other_names, username, email, password, is_admin, registered):
+    def insert_user(self, first_name, last_name, other_names, username, email, password_hashed, is_admin, registered):
         insert_user = "INSERT INTO users(first_name, last_name, other_names, username, email, password, is_admin, registered) VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
-            first_name, last_name, other_names, username, email, password, is_admin, registered)
+            first_name, last_name, other_names, username, email, password_hashed, is_admin, registered)
         self.cursor.execute(insert_user)
-
-    def check_username(self, username):
-        query = "SELECT username FROM users WHERE username='{}'".format(
-            username)
-        self.cursor.execute(query)
-        user = self.cursor.fetchone()
-        return user
 
     def check_email(self, email):
         query = "SELECT email FROM users WHERE email='{}'".format(email)
@@ -49,9 +42,9 @@ class DatabaseConnection:
         email = self.cursor.fetchone()
         return email
 
-    def login_user(self, username):
+    def login(self, username):
         query = "SELECT * FROM users WHERE username='{}'".format(username)
-        print(query)
+        pprint(query)
         self.cursor.execute(query)
         user = self.cursor.fetchone()
         return user
@@ -126,7 +119,7 @@ class DatabaseConnection:
         self.cursor.execute(query)
 
     def login(self, username):
-        query_login = "SELECT username, password FROM users WHERE username='{}'".format(
+        query_login = "SELECT * FROM users WHERE username='{}'".format(
             username)
         self.cursor.execute(query_login)
         credentials = self.cursor.fetchone()
@@ -134,6 +127,5 @@ class DatabaseConnection:
 
     def drop_tables(self):
         """function that drops the tables"""
-        query = "TRUNCATE TABLE users, incidents RESTART IDENTITY "
+        query = "DROP TABLE IF EXISTS users, incidents"
         self.cursor.execute(query)
-        return print('tables dropped successfully')
