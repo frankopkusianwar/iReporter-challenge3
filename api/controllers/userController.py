@@ -64,8 +64,8 @@ class UserController:
         if not db.login(auth_data.get('username')):
             return jsonify({"message":"username does not exist please register"})
         login_user = db.login(auth_data.get('username'))
-        if check_password_hash(login_user['password'], auth_data.get('password')):
-            access_token = jwt.encode({"userId": login_user['id'], "exp": datetime.datetime.utcnow(
+        if check_password_hash(login_user[6], auth_data.get('password')):
+            access_token = jwt.encode({"userId": login_user[0], "exp": datetime.datetime.utcnow(
             ) + datetime.timedelta(minutes=30)}, "franko@pkusianwar")
 
             return jsonify({'access-token': access_token.decode('UTF-8')})

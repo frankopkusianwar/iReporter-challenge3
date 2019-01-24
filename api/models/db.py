@@ -21,22 +21,27 @@ class DatabaseConnection:
             self.host="ec2-50-17-193-83.compute-1.amazonaws.com"
 
         try:
-            connection = psycopg2.connect(database=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
+            #connection = psycopg2.connect(database=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
+            #connection.autocommit = True
+            #self.cursor = connection.cursor()
+
+            connection = psycopg2.connect(database='Ireporter_test_db', user='postgres', host='localhost', password='security93', port='5432')
             connection.autocommit = True
             self.cursor = connection.cursor()
-
-            create_user_table = """CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,
-		                first_name VARCHAR(100), last_name VARCHAR(100), other_names VARCHAR(100),
-		                username VARCHAR(100), email VARCHAR(100), password VARCHAR(100), is_admin BOOLEAN, registered DATE);"""
-            self.cursor.execute(create_user_table)
-
-            create_incident_table = """CREATE TABLE IF NOT EXISTS incidents(id SERIAL PRIMARY KEY,
-		                incident_type VARCHAR(100), location VARCHAR(100), status VARCHAR(100),
-		                images VARCHAR(100), videos VARCHAR(100), created_by INT, comment VARCHAR, created_on DATE);"""
-            self.cursor.execute(create_incident_table)
+            self.create_tables()
 
         except:
             print('Cannot connect to the database.')
+
+    def create_tables(self):
+        create_user_table = """CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,
+                        first_name VARCHAR(100), last_name VARCHAR(100), other_names VARCHAR(100),
+                        username VARCHAR(100), email VARCHAR(100), password VARCHAR(100), is_admin BOOLEAN, registered DATE);"""
+        self.cursor.execute(create_user_table)
+        create_incident_table = """CREATE TABLE IF NOT EXISTS incidents(id SERIAL PRIMARY KEY,
+                        incident_type VARCHAR(100), location VARCHAR(100), status VARCHAR(100),
+                        images VARCHAR(100), videos VARCHAR(100), created_by INT, comment VARCHAR, created_on DATE);"""
+        self.cursor.execute(create_incident_table)
 
     def insert_user(self, first_name, last_name, other_names, username, email, password_hashed, is_admin, registered):
         insert_user = "INSERT INTO users(first_name, last_name, other_names, username, email, password, is_admin, registered) VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
