@@ -10,13 +10,17 @@ iReporter enables any/every citizen to bring any form of corruption to the notic
 ## Functionality
 - `create red-flag record` Enables user to create a red-flag record
 - `Get all red-flags` Enables user to view all red-flag records
+- `Get all interventions` Enables user to view all intervention records
 - `Get single red-flag` Enables user  to get a specific red-flag record
+- `Get single intervention` Enables user  to get a specific intervention record
 - `update comment` Enables  user to add a comment to a red-flag record 
 - `create new user` Enables  users to create accounts
-- `update location` Enables  users to update specific red-flag location 
-- `delete red-flag`Enables users to delete red-flag records
+- `create login user` Enables  users to access all the protected endpoints
+- `update location` Enables  users to update specific red-flag and intervention location 
+- `delete red-flag`Enables users to delete red-flag  records
+- `delete intervention`Enables users to delete intervention  records
 ## Heroku Link
-- https://ireporterapp.herokuapp.com/api/v1/red-flags
+- https://ireporter3-challenge3.herokuapp.com
 ## Installation
 Clone the repository
 ```
@@ -42,7 +46,7 @@ python run.py
 ```
 To run tests run this command at the console/terminal and add the test file name
 ```
-pytest filename
+pytest --cov
 ```
 ## Versioning
 ```
@@ -56,9 +60,14 @@ This is version one"v1" of the API
 |     GET  api/v1/red-flags                  |get all red-flag records                    |   
 |     GET  api/v1/red-flags/<red-flag-id>          |get a specific red-flag record                 |  
 |     PATCH api/v1/red-flags/<red-flag-id>/comments           |adds a comment to a red-flag record      |
-|     PATCH red-flags/<red-flag-id>/location             |update red-flag record location|
+|     PATCH api/v1/red-flags/<red-flag-id>/location             |update red-flag record location|
 |     POST api/v1/users                    |registers users                                      |
-|     DELETE GET  api/v1/red-flags/<red-flag-id>              |delete red-flag record                                     | 
+|     DELETE GET  api/v1/red-flags/<red-flag-id>              |delete red-flag record                                     |
+|     GET  api/v1/interventions                  |get all intervention records                    |
+|     GET  api/v1/interventions/<red-flag-id>          |get a specific intervention record                 |
+|     PATCH api/v1/interventions/<red-flag-id>/comments           |adds a comment to an intervention record       |
+|     PATCH api/v1/interventions/<red-flag-id>/location             |update  intervention location|
+  
 
 ## Authors
 - Okiror Frank
