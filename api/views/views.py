@@ -79,7 +79,7 @@ def edit_specific_intervention_location(current_user, location_incident_id):
 def add_comment_to_specific_red_flag_record(current_user, comment_incident_id):
     return incident.create_comment(comment_incident_id)
 
-@bp.route("/intervention/<int:comment_incident_id>/comment", methods=["PATCH"])
+@bp.route("/interventions/<int:comment_incident_id>/comment", methods=["PATCH"])
 @token_required
 def add_comment_to_specific_intervention_record(current_user, comment_incident_id):
     return incident.create_intervention_comment(comment_incident_id)
@@ -90,7 +90,7 @@ def add_comment_to_specific_intervention_record(current_user, comment_incident_i
 def change_red_flag_status(current_user, status_incident_id):
     return incident.change_particular_status(current_user, status_incident_id)
 
-@bp.route("/intervention/<int:status_incident_id>/status", methods=["PATCH"])
+@bp.route("/interventions/<int:status_incident_id>/status", methods=["PATCH"])
 @token_required
 def change_intervention_status(current_user, status_incident_id):
     return incident.change_particular_status(current_user, status_incident_id)

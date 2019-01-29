@@ -1,5 +1,4 @@
 from flask import request, jsonify
-#from api.models.models import User, IreporterDb
 from api.utilities import check_user, check_email, check_paswd
 import uuid
 import datetime
