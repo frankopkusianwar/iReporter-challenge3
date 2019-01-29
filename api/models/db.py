@@ -23,7 +23,7 @@ class DatabaseConnection:
         try:
             self.connection = psycopg2.connect(database=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
             self.connection.autocommit = True
-            self.cursor = self.connection.cursor()
+            self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
             # self.connection = psycopg2.connect(database='ireporter_db', user='postgres', host='localhost', password='security93', port='5432')
             # self.connection.autocommit = True
