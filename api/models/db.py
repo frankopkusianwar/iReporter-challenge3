@@ -1,5 +1,6 @@
 import os
 import psycopg2
+import psycopg2.extras
 
 
 class DatabaseConnection:
@@ -22,11 +23,11 @@ class DatabaseConnection:
         try:
             self.connection = psycopg2.connect(database=self.db_name, user=self.db_user, host=self.host, password=self.db_password, port='5432')
             self.connection.autocommit = True
-            self.cursor = self.connection.cursor()
+            self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-            # self.connection = psycopg2.connect(database='Ireporter_test_db', user='postgres', host='localhost', password='security93', port='5432')
+            # self.connection = psycopg2.connect(database='ireporter_db', user='postgres', host='localhost', password='security93', port='5432')
             # self.connection.autocommit = True
-            # self.cursor = self.connection.cursor()
+            # self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
             self.create_tables()
 
         except:
@@ -47,7 +48,7 @@ class DatabaseConnection:
             first_name, last_name, other_names, username, email, password_hashed, is_admin, registered)
         self.cursor.execute(insert_user)
 
-    def check_email(self, email):
+    def check_mail(self, email):
         query = "SELECT email FROM users WHERE email='{}'".format(email)
         print(query)
         self.cursor.execute(query)
@@ -104,7 +105,7 @@ class DatabaseConnection:
     def edit_location(self, location, incident_Id):
         edit_location = "UPDATE incidents SET location='{}' WHERE id='{}' AND incident_type='intervention'".format(
             incident_Id, location)
-        self.cursor.execute(edit_location)
+        self.cursor.execute(edit_location) 
 
     def edit_intervention_location(self, location, incident_Id):
         edit_location = "UPDATE incidents SET location='{}' WHERE id='{}' AND incident_type='intervention'".format(
@@ -128,6 +129,12 @@ class DatabaseConnection:
     def delete_intervention(self, incident_Id):
         query = "DELETE FROM incidents WHERE id='{}' AND incident_type='intervention'".format(incident_Id)
         self.cursor.execute(query)
+
+    def admin(self, cur_user):
+        query = "SELECT * FROM users WHERE id='{}' AND is_admin = 'True'".format(cur_user)
+        self.cursor.execute(query)
+        admin = self.cursor.fetchone()
+        return admin
 
     def drop_tables(self):
         """function that drops the tables"""

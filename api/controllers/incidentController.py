@@ -20,7 +20,10 @@ class IncidentController:
         comment = ""
 
         validate_fields = [location, images, videos]
-        if check_inc(validate_fields, location, images, videos) == "invalid":
+        for field in validate_fields:
+            if type(field) != str:
+                return jsonify({"status": 400, "message":"field should be a string"}), 400
+        if check_inc(validate_fields) == "invalid":
             return jsonify({"status": 400, "message": "please fill all fields"}), 400
         if incident_type != "red-flag" and incident_type != "intervention":
             return jsonify({"status": 400, "message": "please enter incidentType as red-flag or intervention"}), 400
@@ -31,12 +34,12 @@ class IncidentController:
         return jsonify({
             "data": [{
                 "status": 201,
-                "message": "created red-flag record",
+                "message": "created incident record",
             }]
         }), 201
 
     def get_all_incident(self):
-        if db.get_all_incidents() == None:
+        if not db.get_all_incidents():
             return jsonify({"status": 200, "message": "red-flag records not found"})
         return jsonify({
             "status": 200,
@@ -44,7 +47,7 @@ class IncidentController:
         })
 
     def get_all_interventions(self):
-        if db.get_all_interventions() == None:
+        if not db.get_all_interventions():
             return jsonify({"status": 200, "message": "intervention records not found"})
         return jsonify({
             "status": 200,
@@ -52,7 +55,7 @@ class IncidentController:
         })
 
     def get_one_incident(self, particular_id):
-        if db.get_one_incident(particular_id) == None:
+        if not db.get_one_incident(particular_id):
             return jsonify({"status": 200, "message": "requested red-flag-id not found"})
         return jsonify({
             "status": 200,
@@ -60,7 +63,7 @@ class IncidentController:
         })
 
     def get_one_intervention(self, particular_id):
-        if db.get_one_intervention(particular_id) == None:
+        if not db.get_one_intervention(particular_id):
             return jsonify({"status": 200, "message": "requested intervention-id not found"})
         return jsonify({
             "status": 200,
@@ -70,6 +73,10 @@ class IncidentController:
     def create_comment(self, comment_id):
         comment_data = request.get_json()
         new_comment = comment_data.get("comment")
+        if not new_comment:
+            return jsonify({"message":"enter comment"})
+        if type(new_comment) != str:
+            return jsonify({"message":"enter string"})
         db.edit_comment(comment_id, new_comment)
         return jsonify({
             "data": [{
@@ -81,8 +88,11 @@ class IncidentController:
     def create_intervention_comment(self, comment_id):
         comment_data = request.get_json()
         new_comment = comment_data.get("comment")
+        if not new_comment:
+            return jsonify({"message":"enter comment"})
+        if type(new_comment) != str:
+            return jsonify({"message":"enter string"})
         db.edit_intervention_comment(comment_id, new_comment)
-
         return jsonify({
             "data": [{
                 "status": 200,
@@ -93,6 +103,10 @@ class IncidentController:
     def update_particular_location(self, location_id):
         location_data = request.get_json()
         new_location = location_data.get("location")
+        if not new_location:
+            return jsonify({"message":"enter location"})
+        if type(new_location) != str:
+            return jsonify({"message":"enter string"})
         db.edit_location(location_id, new_location)
         return jsonify({
             "data": [{
@@ -104,6 +118,10 @@ class IncidentController:
     def update_intervention_location(self, location_id):
         location_data = request.get_json()
         new_location = location_data.get("location")
+        if not new_location:
+            return jsonify({"message":"enter location"})
+        if type(new_location) != str:
+            return jsonify({"message":"enter string"})
         db.edit_intervention_location(location_id, new_location)
         return jsonify({
             "data": [{
@@ -112,23 +130,37 @@ class IncidentController:
             }]
         })
 
-    def change_particular_status(self, status_id):
-        status_data = request.get_json()
-        new_status = status_data.get("status")
-        db.edit_status(status_id, new_status)
-        return jsonify({
-            "status": 200,
-            "message": "status updated successfully"
-        })
+    def change_particular_status(self, current_us, status_id):
+        if db.admin(current_us):
+            status_data = request.get_json()
+            new_status = status_data.get("status")
+            if not new_status:
+                return jsonify({"message":"enter status"})
+            if type(new_status) != str:
+                return jsonify({"message":"enter string"})
+            db.edit_status(status_id, new_status)
+            return jsonify({
+                "status": 200,
+                "message": "status updated successfully"
+            })
+        else:
+            return jsonify({"message":"only admin can change status"})
 
-    def change_intervention_status(self, status_id):
-        status_data = request.get_json()
-        new_status = status_data.get("status")
-        db.edit_intervention_status(status_id, new_status)
-        return jsonify({
-            "status": 200,
-            "message": "status updated successfully"
-        })
+    def change_intervention_status(self, current_us, status_id):
+        if db.admin(current_us):
+            status_data = request.get_json()
+            new_status = status_data.get("status")
+            if not new_status:
+                return jsonify({"message":"enter status"})
+            if type(new_status) != str:
+                return jsonify({"message":"enter string"})
+            db.edit_intervention_status(status_id, new_status)
+            return jsonify({
+                "status": 200,
+                "message": "status updated successfully"
+            })
+        else:
+            return jsonify({"message":"only admin can change status"})
 
     def delete_one_incident(self, delete_id):
         db.delete_incident(delete_id)
@@ -144,6 +176,6 @@ class IncidentController:
         return jsonify({
             "data": [{
                 "status": 200,
-                "message": "red-flag record has been deleted"
+                "message": "intervention record has been deleted"
             }]
         })
